@@ -11,10 +11,10 @@ import os
 import shutil
 
 from jinja2 import FileSystemLoader
-from jinja2._compat import string_types
 from cookiecutter.environment import StrictEnvironment
 from jinja2.exceptions import TemplateSyntaxError, UndefinedError
 from binaryornot.check import is_binary
+from past.builtins import basestring
 
 from .exceptions import (
     NonTemplatedInputDirException,
@@ -245,8 +245,8 @@ def generate_files(repo_dir, context=None, output_dir='.',
     :param output_dir: Where to output the generated project dir into.
     :param overwrite_if_exists: Overwrite the contents of the output directory
         if it exists.
-    :param extra_templates: list of extra template directories to add to jinja2
-        searchpath.
+    :param extra_templates: list of extra template directories to add to the
+        jinja2 searchpath.
     """
     template_dir = find_template(repo_dir)
     logger.debug('Generating project from {}...'.format(template_dir))
@@ -281,11 +281,11 @@ def generate_files(repo_dir, context=None, output_dir='.',
     logger.debug('Project directory is {}'.format(project_dir))
 
     _run_hook_from_repo_dir(repo_dir, 'pre_gen_project', project_dir, context)
-    templates = ['.']
 
     # Configure jinja templates searchpath
+    templates = ['.']
     if extra_templates is not None:
-        if isinstance(extra_templates, string_types):
+        if isinstance(extra_templates, basestring):
             extra_templates = [extra_templates]
         templates.extend(extra_templates)
 
